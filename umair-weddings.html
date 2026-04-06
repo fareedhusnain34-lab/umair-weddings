@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Umair Fareed – Wedding & Events Editor</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --gold: #c9a84c;
+    --gold2: #f0d080;
+    --gold3: #8b6914;
+    --dark: #080808;
+    --dark2: #0f0f0f;
+    --dark3: #141414;
+    --dark4: #1a1a1a;
+    --border: rgba(201,168,76,0.15);
+    --border2: rgba(201,168,76,0.3);
+    --text: #e8e8e8;
+    --muted: #777;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Segoe UI', sans-serif; background: var(--dark); color: var(--text); overflow-x: hidden; }
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: #0a0a0a; }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.2rem 3rem;
+    background: rgba(8,8,8,0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo { font-size: 1.1rem; font-weight: 400; letter-spacing: 4px; text-transform: uppercase; color: #ccc; }
+  .logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--muted); font-size: 0.78rem; letter-spacing: 2px; text-transform: uppercase; transition: color 0.3s; cursor: pointer; }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    padding: 8rem 2rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 0%, rgba(201,168,76,0.1) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201,168,76,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 80% 70%, rgba(139,105,20,0.06) 0%, transparent 60%);
+  }
+  .hero-lines {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(201,168,76,0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(201,168,76,0.03) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 800px; }
+  .hero-ornament { color: var(--gold); font-size: 1.5rem; letter-spacing: 8px; margin-bottom: 1.5rem; opacity: 0.7; }
+  .hero-badge {
+    display: inline-block;
+    border: 1px solid var(--border2);
+    color: var(--gold);
+    font-size: 0.72rem; letter-spacing: 3px; text-transform: uppercase;
+    padding: 0.45rem 1.5rem; margin-bottom: 2rem;
+  }
+  .hero h1 { font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 300; line-height: 1.1; margin-bottom: 0.5rem; letter-spacing: 2px; }
+  .hero h1 strong { font-weight: 700; display: block; }
+  .hero h1 .gold { color: var(--gold); font-weight: 300; font-style: italic; font-size: 0.6em; letter-spacing: 4px; display: block; margin-top: 0.3rem; }
+  .divider { display: flex; align-items: center; gap: 1rem; justify-content: center; margin: 1.8rem 0; }
+  .divider-line { flex: 1; max-width: 80px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold)); }
+  .divider-line.right { background: linear-gradient(90deg, var(--gold), transparent); }
+  .divider-diamond { width: 6px; height: 6px; background: var(--gold); transform: rotate(45deg); }
+  .hero-sub { font-size: 1rem; color: var(--muted); line-height: 1.8; margin-bottom: 2.5rem; max-width: 520px; margin-left: auto; margin-right: auto; font-weight: 300; }
+  .specialties { display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: center; margin-bottom: 3rem; }
+  .spec-tag {
+    border: 1px solid var(--border);
+    padding: 0.4rem 1.2rem;
+    font-size: 0.78rem; color: #aaa; letter-spacing: 1px; text-transform: uppercase;
+  }
+  .hero-btns { display: flex; gap: 1.2rem; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    padding: 0.9rem 2.5rem; font-size: 0.82rem; font-weight: 400;
+    cursor: pointer; text-decoration: none; border: none; transition: all 0.3s;
+    letter-spacing: 2px; text-transform: uppercase;
+  }
+  .btn-gold { background: var(--gold); color: #000; }
+  .btn-gold:hover { background: var(--gold2); }
+  .btn-outline { background: transparent; border: 1px solid var(--border2); color: var(--gold); }
+  .btn-outline:hover { background: rgba(201,168,76,0.08); }
+
+  /* STATS */
+  .stats-bar {
+    background: var(--dark3);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    padding: 2rem 3rem;
+  }
+  .stat { text-align: center; padding: 0.5rem; border-right: 1px solid var(--border); }
+  .stat:last-child { border-right: none; }
+  .stat-num { font-size: 1.8rem; font-weight: 300; color: var(--gold); letter-spacing: 2px; }
+  .stat-label { font-size: 0.72rem; color: var(--muted); margin-top: 0.3rem; text-transform: uppercase; letter-spacing: 2px; }
+
+  /* SECTIONS */
+  section { padding: 6rem 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-header { margin-bottom: 4rem; text-align: center; }
+  .section-eyebrow { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 4px; color: var(--gold); margin-bottom: 1rem; }
+  .section-title { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 300; letter-spacing: 2px; }
+  .section-title strong { font-weight: 700; color: var(--gold); }
+  .section-desc { color: var(--muted); margin-top: 0.8rem; font-size: 0.9rem; letter-spacing: 0.5px; }
+
+  /* VIDEO GRID */
+  .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 1.5rem; }
+  .video-card {
+    background: var(--dark3);
+    border: 1px solid var(--border);
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .video-card:hover { border-color: var(--border2); transform: translateY(-4px); }
+  .video-thumb {
+    position: relative; width: 100%; height: 200px;
+    background: #0a0a0a;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; cursor: pointer;
+  }
+  .video-thumb iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+  .play-overlay {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+    transition: background 0.3s;
+  }
+  .video-thumb:hover .play-overlay { background: rgba(0,0,0,0.15) !important; }
+  .play-btn {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: rgba(201,168,76,0.15);
+    border: 1px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.3s;
+  }
+  .video-thumb:hover .play-btn { background: var(--gold); }
+  .play-icon { width: 0; height: 0; border-style: solid; border-width: 9px 0 9px 16px; border-color: transparent transparent transparent var(--gold); margin-left: 3px; transition: border-color 0.3s; }
+  .video-thumb:hover .play-icon { border-color: transparent transparent transparent #000; }
+  .play-label { font-size: 0.72rem; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; opacity: 0.8; }
+  .video-info { padding: 1.2rem 1.4rem 1.4rem; border-top: 1px solid var(--border); }
+  .video-info h3 { font-size: 0.95rem; font-weight: 400; letter-spacing: 1px; margin-bottom: 0.4rem; color: #ddd; }
+  .video-info p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+  .video-meta { display: flex; gap: 0.5rem; margin-top: 0.7rem; flex-wrap: wrap; }
+  .vtag { border: 1px solid var(--border); color: var(--gold); font-size: 0.72rem; padding: 0.2rem 0.7rem; letter-spacing: 1px; text-transform: uppercase; }
+
+  /* SERVICES */
+  .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.2rem; }
+  .service-card {
+    background: var(--dark3); border: 1px solid var(--border);
+    padding: 2rem 1.6rem;
+    transition: border-color 0.3s, transform 0.3s;
+    text-align: center;
+  }
+  .service-card:hover { border-color: var(--border2); transform: translateY(-4px); }
+  .service-icon { font-size: 2rem; margin-bottom: 1.2rem; }
+  .service-card h3 { font-size: 0.95rem; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.8rem; color: #ccc; }
+  .service-card p { font-size: 0.83rem; color: var(--muted); line-height: 1.7; }
+  .service-price { margin-top: 1.2rem; font-size: 0.85rem; color: var(--muted); }
+  .service-price span { color: var(--gold); font-size: 1.2rem; font-weight: 300; }
+
+  /* REVIEWS */
+  .reviews-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 1.5rem; }
+  .review-card {
+    background: var(--dark3);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    position: relative; overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .review-card::before {
+    content: '\201C';
+    position: absolute; top: -15px; right: 20px;
+    font-size: 8rem; line-height: 1; font-weight: 700;
+    color: rgba(201,168,76,0.07);
+    font-family: Georgia, serif;
+  }
+  .review-card:hover { border-color: var(--border2); }
+  .stars { display: flex; gap: 3px; margin-bottom: 1rem; }
+  .star { color: var(--gold); font-size: 13px; }
+  .review-text { font-size: 0.88rem; color: #bbb; line-height: 1.8; margin-bottom: 1.5rem; font-style: italic; }
+  .reviewer { display: flex; align-items: center; gap: 0.8rem; }
+  .reviewer-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85rem; color: #000;
+    flex-shrink: 0; background: var(--gold);
+  }
+  .reviewer-name { font-size: 0.88rem; font-weight: 600; letter-spacing: 0.5px; }
+  .reviewer-loc { font-size: 0.76rem; color: var(--muted); margin-top: 0.1rem; }
+  .fiverr-badge { font-size: 0.7rem; color: #1dbf73; background: rgba(29,191,115,0.1); padding: 0.2rem 0.6rem; border-radius: 2px; margin-left: auto; letter-spacing: 0.5px; }
+
+  /* CTA */
+  .cta-section {
+    text-align: center; padding: 7rem 2rem;
+    background: linear-gradient(180deg, var(--dark) 0%, rgba(201,168,76,0.05) 50%, var(--dark) 100%);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .cta-section h2 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 300; margin-bottom: 0.8rem; letter-spacing: 2px; }
+  .cta-section h2 span { color: var(--gold); font-style: italic; }
+  .cta-section p { color: var(--muted); margin-bottom: 2.5rem; font-size: 0.95rem; letter-spacing: 0.5px; }
+  .cta-links { display: flex; gap: 1.2rem; justify-content: center; flex-wrap: wrap; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 3rem;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+    background: var(--dark2);
+  }
+  .foot-logo { font-size: 0.9rem; letter-spacing: 3px; text-transform: uppercase; color: #aaa; }
+  .foot-logo span { color: var(--gold); }
+  footer p { font-size: 0.78rem; color: #444; letter-spacing: 1px; }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0,0,0,0.9); align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--dark3); border: 1px solid var(--border2);
+    padding: 2rem; width: 90%; max-width: 460px;
+  }
+  .modal h3 { font-size: 1rem; font-weight: 400; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1.5rem; color: var(--gold); }
+  .form-group { margin-bottom: 1rem; }
+  .form-group label { font-size: 0.76rem; color: var(--muted); display: block; margin-bottom: 0.4rem; letter-spacing: 1px; text-transform: uppercase; }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; background: var(--dark); border: 1px solid var(--border);
+    padding: 0.75rem 0.9rem; color: #fff; font-size: 0.88rem;
+    font-family: inherit; outline: none; transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); }
+  .form-group select option { background: #111; }
+  .modal-btns { display: flex; gap: 0.8rem; margin-top: 1.5rem; }
+
+  @media (max-width: 700px) {
+    nav { padding: 1rem 1.2rem; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    footer { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">UF <span>✦</span></div>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
+  <div class="hero-content">
+    <div class="hero-ornament">✦ ✦ ✦</div>
+    <div class="hero-badge">Wedding &amp; Events Cinematography</div>
+    <h1>
+      <strong>Umair Fareed</strong>
+      <span class="gold">Cinematic Video Editor</span>
+    </h1>
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-diamond"></div>
+      <div class="divider-line right"></div>
+    </div>
+    <p class="hero-sub">
+      Luxury wedding &amp; event edits crafted for Black culture celebrations — 
+      elegant storytelling, rich color grading, and cinematic quality that lasts forever.
+    </p>
+    <div class="specialties">
+      <span class="spec-tag">✦ Weddings</span>
+      <span class="spec-tag">✦ Cultural Events</span>
+      <span class="spec-tag">✦ Birthday Parties</span>
+      <span class="spec-tag">✦ Celebrations</span>
+    </div>
+    <div class="hero-btns">
+      <a href="#portfolio" class="btn btn-gold">View Portfolio</a>
+      <a href="https://www.fiverr.com/umair_fareed01?public_mode=true" class="btn btn-outline" target="_blank">Hire on Fiverr →</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat"><div class="stat-num">80+</div><div class="stat-label">Weddings Edited</div></div>
+  <div class="stat"><div class="stat-num">5.0★</div><div class="stat-label">Fiverr Rating</div></div>
+  <div class="stat"><div class="stat-num">$75</div><div class="stat-label">Starting Price</div></div>
+  <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Satisfaction</div></div>
+</div>
+
+<!-- PORTFOLIO -->
+<section id="portfolio" style="background: var(--dark2)">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">✦ My Work ✦</div>
+      <h2 class="section-title">Wedding &amp; Event <strong>Portfolio</strong></h2>
+      <p class="section-desc">Real projects — click to play</p>
+    </div>
+    <div class="video-grid" id="videoGrid">
+
+      <div class="video-card">
+        <div class="video-thumb" onclick="playDrive(this,'1sM47sOGG0u5VAOQnaXeJesX_HGMCDtxY')">
+          <div class="play-overlay" style="background:linear-gradient(135deg,rgba(201,168,76,0.12),rgba(0,0,0,0.6))">
+            <div class="play-btn"><div class="play-icon"></div></div>
+            <span class="play-label">Play Video</span>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3>Wedding Highlights — Vol. 1</h3>
+          <p>Elegant cinematic wedding edit with rich color grading.</p>
+          <div class="video-meta"><span class="vtag">Wedding</span></div>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <div class="video-thumb" onclick="playDrive(this,'1mSel8ZNDbMZtI_IFenQ4GBwi_jO2czUm')">
+          <div class="play-overlay" style="background:linear-gradient(135deg,rgba(139,105,20,0.2),rgba(0,0,0,0.6))">
+            <div class="play-btn"><div class="play-icon"></div></div>
+            <span class="play-label">Play Video</span>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3>Wedding Highlights — Vol. 2</h3>
+          <p>Emotional storytelling with luxury film look &amp; feel.</p>
+          <div class="video-meta"><span class="vtag">Wedding</span></div>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <div class="video-thumb" onclick="playDrive(this,'1UtvJvEdp8gduwQXfqNlJDudDS2oOEKMo')">
+          <div class="play-overlay" style="background:linear-gradient(135deg,rgba(201,168,76,0.1),rgba(0,0,0,0.65))">
+            <div class="play-btn"><div class="play-icon"></div></div>
+            <span class="play-label">Play Video</span>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3>Cultural Event — Vol. 1</h3>
+          <p>Vibrant event coverage with smooth transitions.</p>
+          <div class="video-meta"><span class="vtag">Events</span></div>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <div class="video-thumb" onclick="playDrive(this,'1YkSYCifQ9-DmiKEe0dqQO2LeubOxm1YZ')">
+          <div class="play-overlay" style="background:linear-gradient(135deg,rgba(139,105,20,0.15),rgba(0,0,0,0.6))">
+            <div class="play-btn"><div class="play-icon"></div></div>
+            <span class="play-label">Play Video</span>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3>Cultural Event — Vol. 2</h3>
+          <p>Dynamic celebration edit with cinematic color work.</p>
+          <div class="video-meta"><span class="vtag">Events</span></div>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <div class="video-thumb" onclick="playDrive(this,'1X0H-Ig1k04reDbepJ-zKPMpUah_BKEs0')">
+          <div class="play-overlay" style="background:linear-gradient(135deg,rgba(201,168,76,0.12),rgba(0,0,0,0.6))">
+            <div class="play-btn"><div class="play-icon"></div></div>
+            <span class="play-label">Play Video</span>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3>Wedding Highlights — Vol. 3</h3>
+          <p>Timeless wedding film with emotional pacing.</p>
+          <div class="video-meta"><span class="vtag">Wedding</span></div>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <div class="video-thumb" onclick="playDrive(this,'1e-9iDQILR948fKl5BkF2UM4PXOGafoQs')">
+          <div class="play-overlay" style="background:linear-gradient(135deg,rgba(139,105,20,0.18),rgba(0,0,0,0.6))">
+            <div class="play-btn"><div class="play-icon"></div></div>
+            <span class="play-label">Play Video</span>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3>Celebration Event — Vol. 1</h3>
+          <p>Party highlights with high energy &amp; elegant editing.</p>
+          <div class="video-meta"><span class="vtag">Events</span></div>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <div class="video-thumb" onclick="playDrive(this,'1MfDpq2Ob82VTVxA30pBknkUNwAfwal40')">
+          <div class="play-overlay" style="background:linear-gradient(135deg,rgba(201,168,76,0.1),rgba(0,0,0,0.65))">
+            <div class="play-btn"><div class="play-icon"></div></div>
+            <span class="play-label">Play Video</span>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3>Wedding Highlights — Vol. 4</h3>
+          <p>Beautiful moments captured with luxury film quality.</p>
+          <div class="video-meta"><span class="vtag">Wedding</span></div>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <div class="video-thumb" onclick="playDrive(this,'1I14UifuXgTo42i_6Fyzjl5rgCIyXtTwG')">
+          <div class="play-overlay" style="background:linear-gradient(135deg,rgba(139,105,20,0.15),rgba(0,0,0,0.6))">
+            <div class="play-btn"><div class="play-icon"></div></div>
+            <span class="play-label">Play Video</span>
+          </div>
+        </div>
+        <div class="video-info">
+          <h3>Celebration Event — Vol. 2</h3>
+          <p>Vibrant &amp; cinematic event coverage from start to finish.</p>
+          <div class="video-meta"><span class="vtag">Events</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">✦ What I Offer ✦</div>
+      <h2 class="section-title">My <strong>Services</strong></h2>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">💍</div>
+        <h3>Wedding Film</h3>
+        <p>Full cinematic wedding edit — ceremony, reception, highlights. Emotional storytelling with luxury color grade.</p>
+        <div class="service-price">Starting <span>$75</span></div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🎉</div>
+        <h3>Event Highlights</h3>
+        <p>Birthday parties, cultural celebrations, family events — beautifully edited highlight reels.</p>
+        <div class="service-price">Starting <span>$75</span></div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🎬</div>
+        <h3>Short Film Edit</h3>
+        <p>Instagram &amp; social media ready edits — cinematic look, music sync, text overlays.</p>
+        <div class="service-price">Starting <span>$50</span></div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">✨</div>
+        <h3>Color Grading</h3>
+        <p>Rich luxury color grade for your raw footage — that high-end film look for Black skin tones.</p>
+        <div class="service-price">Starting <span>$40</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews" style="background: var(--dark2)">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">✦ Client Love ✦</div>
+      <h2 class="section-title">Fiverr <strong>Reviews</strong></h2>
+    </div>
+    <div class="reviews-grid" id="reviewsGrid">
+
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p class="review-text">"Umair captured every beautiful moment of our wedding. The edit was cinematic, emotional and exactly what we dreamed of. Absolutely stunning work!"</p>
+        <div class="reviewer">
+          <div class="reviewer-avatar">TJ</div>
+          <div>
+            <div class="reviewer-name">Tanya J.</div>
+            <div class="reviewer-loc">🇺🇸 Atlanta, USA</div>
+          </div>
+          <div class="fiverr-badge">Fiverr ✓</div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p class="review-text">"The color grading was perfect for our skin tones — rich and vibrant. Our wedding video looks like a Hollywood film. Highly recommend!"</p>
+        <div class="reviewer">
+          <div class="reviewer-avatar">MK</div>
+          <div>
+            <div class="reviewer-name">Marcus K.</div>
+            <div class="reviewer-loc">🇬🇧 London, UK</div>
+          </div>
+          <div class="fiverr-badge">Fiverr ✓</div>
+        </div>
+      </div>
+
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p class="review-text">"Delivered our event highlights in 2 days! The transitions, music sync, everything was perfect. Our guests couldn't stop watching it. 10/10!"</p>
+        <div class="reviewer">
+          <div class="reviewer-avatar">AD</div>
+          <div>
+            <div class="reviewer-name">Aisha D.</div>
+            <div class="reviewer-loc">🇨🇦 Toronto, Canada</div>
+          </div>
+          <div class="fiverr-badge">Fiverr ✓</div>
+        </div>
+      </div>
+
+    </div>
+    <div style="text-align:center;margin-top:2.5rem">
+      <button class="btn btn-outline" onclick="document.getElementById('reviewModal').classList.add('open')">+ Add Client Review</button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="hero-ornament">✦ ✦ ✦</div>
+  <h2>Let's create something <span>timeless</span></h2>
+  <p>Your special day deserves a cinematic edit that lasts forever — let's talk!</p>
+  <div class="cta-links">
+    <a href="https://www.fiverr.com/umair_fareed01?public_mode=true" target="_blank" class="btn btn-gold">Order on Fiverr</a>
+    <a href="https://wa.me/923102540050" target="_blank" class="btn btn-outline">WhatsApp Me</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-logo">Umair Fareed <span>✦</span></div>
+  <p>© 2026 · Wedding &amp; Events Video Editor · Pakistan</p>
+  <p style="font-size:0.72rem;color:#333">Portfolio · umairfareedweddings.tiiny.site</p>
+</footer>
+
+<!-- ADD REVIEW MODAL -->
+<div class="modal-overlay" id="reviewModal">
+  <div class="modal">
+    <h3>✦ Add Client Review</h3>
+    <div class="form-group">
+      <label>Client Name</label>
+      <input type="text" id="rName" placeholder="e.g. Tanya J.">
+    </div>
+    <div class="form-group">
+      <label>Country</label>
+      <input type="text" id="rLoc" placeholder="e.g. 🇺🇸 United States">
+    </div>
+    <div class="form-group">
+      <label>Review Text</label>
+      <textarea id="rText" rows="4" placeholder="Paste Fiverr review here..." style="resize:vertical"></textarea>
+    </div>
+    <div class="modal-btns">
+      <button class="btn btn-gold" onclick="addReview()">Add Review</button>
+      <button class="btn btn-outline" onclick="document.getElementById('reviewModal').classList.remove('open')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function playDrive(thumb, fileId) {
+    thumb.innerHTML = '';
+    const iframe = document.createElement('iframe');
+    iframe.src = 'https://drive.google.com/file/d/' + fileId + '/preview';
+    iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:none';
+    iframe.setAttribute('allowfullscreen', '');
+    iframe.setAttribute('allow', 'autoplay');
+    thumb.appendChild(iframe);
+  }
+
+  function addReview() {
+    const name = document.getElementById('rName').value.trim() || 'Anonymous';
+    const loc = document.getElementById('rLoc').value.trim() || '🌍 Global';
+    const text = document.getElementById('rText').value.trim();
+    if (!text) return;
+    const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2);
+    const card = document.createElement('div');
+    card.className = 'review-card';
+    card.innerHTML = `
+      <div class="stars">★★★★★</div>
+      <p class="review-text">"${text}"</p>
+      <div class="reviewer">
+        <div class="reviewer-avatar">${initials}</div>
+        <div>
+          <div class="reviewer-name">${name}</div>
+          <div class="reviewer-loc">${loc}</div>
+        </div>
+        <div class="fiverr-badge">Fiverr ✓</div>
+      </div>`;
+    document.getElementById('reviewsGrid').appendChild(card);
+    document.getElementById('reviewModal').classList.remove('open');
+    ['rName','rLoc','rText'].forEach(id => document.getElementById(id).value = '');
+  }
+
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === this) this.classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>
